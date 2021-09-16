@@ -22,9 +22,10 @@ for (const file of commandFiles) {
 
 client.once('ready' , () => {
     console.log('YEE is up and running');
-    let activities = [`sleeping`, `helping with hw`, `eating`   ],i = 0;
-  setInterval(() => bot.user.setActivity(`${activities[i++ %  activities.length]}`,  {type:"STREAMING",url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"  }), 5000)
-)
+    let activities = [`Anime`, `Anime`, `Anime`   ],i = 0;
+  setInterval(() => client.user.setActivity(`${activities[i++ %  activities.length]}`,  {type:"WATCHING"}), 5000)
+  client.user.setStatus('idle');
+
 });
 
 client.on('message',message => {
