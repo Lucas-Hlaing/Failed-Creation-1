@@ -3,6 +3,12 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const {prefix,token} = require('./configs.json');
 
+var http = require('http');  
+http.createServer(function (req, res) {   
+  res.write("I'm alive");   
+  res.end(); 
+}).listen(8080);
+
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
@@ -16,6 +22,9 @@ for (const file of commandFiles) {
 
 client.once('ready' , () => {
     console.log('YEE is up and running');
+    let activities = [`sleeping`, `helping with hw`, `eating`   ],i = 0;
+  setInterval(() => bot.user.setActivity(`${activities[i++ %  activities.length]}`,  {type:"STREAMING",url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"  }), 5000)
+)
 });
 
 client.on('message',message => {
