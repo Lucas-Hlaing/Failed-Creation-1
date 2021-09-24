@@ -14,13 +14,13 @@ module.exports = {
         const permissions = voiceChannel.permissionsFor(message.client.user);
         if(!permissions.has('SPEAK') || !permissions.has('CONNECT')) return message.channel.send('You can\'t use this command');
 
-        const severQueue = queue.get(message.guild.id);
+        const serverQueue = queue.get(message.guild.id);
 
         if(cmd === 'play' || cmd === 'p'){
             if(!args.length) return message.channel.send('Add keywords, a link or sth');
-            let songs = {};
-            if(ytdl.validateURL(args)){
-                const songInfo = await ytdl.getInfo(args);
+            let song = {};
+            if(ytdl.validateURL(args[0])){
+                const songInfo = await ytdl.getInfo(args[0]);
                 song = {title : songInfo.videoDetails.title, url : songInfo.videoDetails.url};
             } else{
                 const videoFinder = async(query) => {
