@@ -15,7 +15,7 @@ module.exports = (Discord, client, message) => {
 
     if(command){
         try{
-            command.execute(client, message, args, cmd, Discord);
+            command.execute(message, args, cmd, client, Discord);
         }catch(error){
             console.log(error);
             message.channel.send('Could not find that command.');

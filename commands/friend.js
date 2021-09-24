@@ -2,7 +2,7 @@ module.exports = {
     name: 'friend',
     aliases: ['may', 'sandy'],
     description: 'just random facts',
-    execute(client, message, args, cmd){
+    execute(message, args, cmd){
         if(cmd === 'may'){
             if(message.author.id == '763074950616842240'){
                 message.reply('ure gonna say my bot sucks so no u cant use this command. :((');
