@@ -1,5 +1,6 @@
 module.exports = {
     name : 'clear',
+    aliases: ['delete'],
     description : 'clears messages',
     async execute(client, message, args){
         if(message.author.id =='397684451154460673'){}else{

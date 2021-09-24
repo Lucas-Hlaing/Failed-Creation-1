@@ -1,5 +1,6 @@
 module.exports = {
     name:'leave',
+    aliases: ['disconnect'],
     description: 'For bot to leave channel',
     async execute(client, message,args){
         const voiceChannel = message.member.voice.channel;
