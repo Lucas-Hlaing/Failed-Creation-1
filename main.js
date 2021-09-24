@@ -1,7 +1,7 @@
 
 const fs = require('fs');
 const Discord = require('discord.js');
-const {token} = require('./configs.json');
+require('dotenv').config();
 
 var http = require('http');  
 http.createServer(function (req, res) {   
@@ -20,4 +20,4 @@ client.commands = new Discord.Collection();
 
 
 
-client.login(token)
+client.login(process.env.discord_token)
