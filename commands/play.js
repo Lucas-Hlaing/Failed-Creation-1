@@ -6,7 +6,7 @@ const { validateID } = require('ytdl-core');
 module.exports = {
     name: 'play',
     description: 'plays a song from youtube',
-    async execute (message, args) {
+    async execute (client, message, args) {
         const voiceChannel = message.member.voice.channel;
 
         if(!voiceChannel) return message.reply('Join a channel first');
@@ -41,9 +41,10 @@ module.exports = {
             const stream = ytdl(video.url, {filter: 'audioonly'});
             connection.play(stream, {seek: 0, volume: 0.25})
 
-            .on('finish', ()=> {
-            voiceChannel.leave();
-            });
+            //  .on('finish', ()=> {
+            //  voiceChannel.leave();
+            //  });
+             
 
             await message.channel.send(`Playing :mega::headphones: "${video.title}" :headphones:`);
         } else {

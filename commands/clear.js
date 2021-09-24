@@ -1,7 +1,7 @@
 module.exports = {
     name : 'clear',
     description : 'clears messages',
-    async execute(message, args){
+    async execute(client, message, args){
         if(message.author.id =='397684451154460673'){}else{
             if(!message.member.permissions.has('ADMINISTRATOR')) message.channel.send('U need to either be Lucas or have Admin');
             return;

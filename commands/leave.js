@@ -1,7 +1,7 @@
 module.exports = {
     name:'leave',
     description: 'For bot to leave channel',
-    async execute(message,args){
+    async execute(client, message,args){
         const voiceChannel = message.member.voice.channel;
 
         if(!voiceChannel) return message.reply('You aren\'t even in the voice channel');
