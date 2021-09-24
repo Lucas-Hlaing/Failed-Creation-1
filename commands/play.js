@@ -37,14 +37,14 @@ module.exports = {
             }
             if(!serverQueue){
 
-                const queueConstructor = {
+                const queue_constructor = {
                     voice_channel : voiceChannel,
                     text_channel : message.channel,
                     connection : null,
                     songs : []
                 }
-                queue.set(message.guild.id, queueConstructor)
-                queueConstructor.songs.push(song);
+                queue.set(message.guild.id, queue_constructor)
+                queue_constructor.songs.push(song);
 
             try{
                 const connection = await voiceChannel.join();
@@ -55,13 +55,13 @@ module.exports = {
                 message.channel.send('You broke sth. couldnt connect to channel');
                 throw error;
             }
-        }else{
-            serverQueue.songs.push(song);
-            return message.channel.send(`${song} has been added to the queue.`);
-        }
+            }else{
+                serverQueue.songs.push(song);
+                return message.channel.send(`${song.title} has been added to the queue.`);
+            }
         } 
-        else if(cmd === 'skip') skip_song(message, severQueue);
-        else if(cmd === 'stop') stop_song(message, severQueue);
+        else if(cmd === 'skip') skip_song(message, serverQueue);
+        else if(cmd === 'stop') stop_song(message, serverQueue);
     }
 }
 
@@ -74,7 +74,7 @@ const videoPlayer = async (guild, song) => {
     }
 
     const stream = ytdl(song.url, {filter: 'audioonly'});
-    song_queue.connection.play(strea, {seek : 0 , volume: 0.5})
+    song_queue.connection.play(stream, {seek : 0 , volume: 0.5})
     .on('finish', () => {
         song_queue.songs.shift();
         videoPlayer(guild, song_queue.songs[0]);
@@ -84,7 +84,7 @@ const videoPlayer = async (guild, song) => {
 
 const skip_song = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
-    if(!severQueue){
+    if(!serverQueue){
         return message.channel.send('There are no songs in the queue');
     };
     serverQueue.connection.dispatcher.end();
