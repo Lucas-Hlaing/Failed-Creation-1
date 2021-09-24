@@ -20,4 +20,4 @@ client.commands = new Discord.Collection();
 
 
 
-client.login(process.env.discord_token)
+client.login(process.env.DISCORD_TOKEN)

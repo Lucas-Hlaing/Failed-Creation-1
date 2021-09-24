@@ -1,5 +1,5 @@
 module.exports = (Discord, client, message) => {
-    const prefix =process.env.prefix;
+    const prefix =process.env.PREFIX;
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     
     const blocked = ['425258904688263188'];
