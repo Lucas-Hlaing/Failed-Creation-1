@@ -60,8 +60,8 @@ module.exports = {
                 return message.channel.send(`${song.title} has been added to the queue.`);
             }
         } 
-        else if(cmd === 'skip') skip_song(message, serverQueue);
-        else if(cmd === 'stop') stop_song(message, serverQueue);
+        else if(cmd === 'skip' || cmd === 's') skip_song(message, serverQueue);
+        else if(cmd === 'disconnect' || cmd === 'leave') stop_song(message, serverQueue);
     }
 }
 
