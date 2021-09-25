@@ -41,7 +41,8 @@ module.exports = {
                     voice_channel : voiceChannel,
                     text_channel : message.channel,
                     connection : null,
-                    songs : []
+                    songs : [],
+                    leaveTimer : null,
                 }
                 queue.set(message.guild.id, queue_constructor)
                 queue_constructor.songs.push(song);
@@ -68,10 +69,14 @@ module.exports = {
 const videoPlayer = async (guild, song) => {
     const song_queue = queue.get(guild.id);
     if(!song){
-        song_queue.voice_channel.leave();
-        queue.delete(guild.id);
+        if(song_queue.songs.length == 0){
+            song_queue.leaveTimer = setTimeout(function() {
+                leaveTimeout(guild.id);
+            }, 300 * 1000);
+        }
         return;
     }
+
 
     const stream = ytdl(song.url, {filter: 'audioonly'});
     song_queue.connection.play(stream, {seek : 0 , volume: 0.5})
@@ -79,7 +84,7 @@ const videoPlayer = async (guild, song) => {
         song_queue.songs.shift();
         videoPlayer(guild, song_queue.songs[0]);
     });
-    await song_queue.text_channel.send(`Now PLaying: ${song.title}`);
+    await song_queue.text_channel.send(`Now Playing: ${song.title}`);
 };
 
 const skip_song = (message, serverQueue) => {
@@ -93,13 +98,20 @@ const skip_song = (message, serverQueue) => {
         serverQueue.songs.shift();
         videoPlayer(message.guild, serverQueue.songs[0]);
     }
-
-
 };
 
 const stop_song = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
-    serverQueue.songs = [];
+    queue.delete(message.guild.id);
     serverQueue.voice_channel.leave();
 
+}
+
+function leaveTimeout (guild_id){
+    song_queue = queue.get(guild_id);
+    if(song_queue){
+        song_queue.text_channel.send('You ignored me for too long so I left.');
+        song_queue.voice_channel.leave();
+        queue.delete(guild_id);
+    }
 }
