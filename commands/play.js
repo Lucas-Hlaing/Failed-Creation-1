@@ -77,7 +77,13 @@ const videoPlayer = async (guild, song) => {
         }
         return;
     }
-
+    if(song_queue.leaveTimer){
+        try{
+            clearTimeout(song_queue.leaveTimer);
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     const stream = ytdl(song.url, {filter: 'audioonly'});
     song_queue.connection.play(stream, {seek : 0 , volume: 0.5})
