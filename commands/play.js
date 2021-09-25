@@ -5,7 +5,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs'],
+    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -63,6 +63,7 @@ module.exports = {
         } 
         else if(cmd === 'skip' || cmd === 'fs') skip_song(message, serverQueue);
         else if(cmd === 'disconnect' || cmd === 'leave') stop_song(message, serverQueue);
+        else if(cmd === 'queue' || cmd === 'q') get_queue(message, serverQueue);
     }
 }
 
@@ -105,6 +106,21 @@ const stop_song = (message, serverQueue) => {
     queue.delete(message.guild.id);
     serverQueue.voice_channel.leave();
 
+}
+
+const get_queue = (message, serverQueue) => {
+    if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
+    if(!serverQueue){
+        return message.channel.send('There are no songs in the queue');
+    };
+    let now_playing = serverQueue.songs[0].title;
+    let playlist = `Now Playing: ${now_playing} \n --------------------- \n PLaying Later \n`;
+
+    for(var i= 1; i < serverQueue.songs.length; i++){
+        let song = serverQueue.songs[i];
+        playlist += `${i}. ${song.title} \n`
+    }
+    message.channel.send(playlist);
 }
 
 function leaveTimeout (guild_id){
