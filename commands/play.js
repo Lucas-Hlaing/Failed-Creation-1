@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
+const { MessageEmbed } = require('discord.js');
 
 const queue = new Map();
 
@@ -127,13 +128,22 @@ const get_queue = (message, serverQueue) => {
         return message.channel.send('There are no songs in the queue');
     };
     let now_playing = serverQueue.songs[0].title;
-    let playlist = `Now Playing: ${now_playing} \n --------------------- \n PLaying Later \n`;
+    let playlist = '';
 
     for(var i= 1; i < serverQueue.songs.length; i++){
         let song = serverQueue.songs[i];
         playlist += `${i}. ${song.title} \n`
     }
-    message.channel.send(playlist);
+    const QueueEmbed = new MessageEmbed()
+    .setColor('#CCE7F1')
+    .setTitle(`Queue for ${message.guild.name}`)
+    .addFields(
+        {name: 'Now Playing: ', value: now_playing},
+        {name: 'Queue', value: playlist},
+    );
+
+
+    message.channel.send(QueueEmbed);
 }
 
 const nowplay = (message,serverQueue) => {
@@ -142,7 +152,12 @@ const nowplay = (message,serverQueue) => {
         return message.channel.send('There are no songs in the queue');
     };
     let now_playing = serverQueue.songs[0].title;
-    message.channel.send(`Now Playing: ${now_playing}`);
+    const NPEmbed = new MessageEmbed()
+    .setColor('#CCE7F1')
+    .setTitle('Now Playing')
+    .setDescription(now_playing);
+    
+    message.channel.send(NPEmbed);
 };
 
 function leaveTimeout (guild_id){
