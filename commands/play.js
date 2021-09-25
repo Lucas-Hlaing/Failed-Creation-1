@@ -5,7 +5,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'stop', 'p', 'leave', 'fs'],
+    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -100,6 +100,6 @@ const skip_song = (message, serverQueue) => {
 const stop_song = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
     serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
+    serverQueue.voice_channel.leave();
 
 }
