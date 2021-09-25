@@ -5,7 +5,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'stop', 'p'],
+    aliases: ['skip', 'stop', 'p', 'leave', 'fs'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -60,7 +60,7 @@ module.exports = {
                 return message.channel.send(`${song.title} has been added to the queue.`);
             }
         } 
-        else if(cmd === 'skip' || cmd === 's') skip_song(message, serverQueue);
+        else if(cmd === 'skip' || cmd === 'fs') skip_song(message, serverQueue);
         else if(cmd === 'disconnect' || cmd === 'leave') stop_song(message, serverQueue);
     }
 }
@@ -87,12 +87,19 @@ const skip_song = (message, serverQueue) => {
     if(!serverQueue){
         return message.channel.send('There are no songs in the queue');
     };
-    serverQueue.connection.dispatcher.end();
+    if(serverQueue.songs.length == 1){
+        message.channel.send('no more songs left in queue. Add another or disconnect me.');
+    }else {
+        serverQueue.songs.shift();
+        videoPlayer(message.guild, serverQueue.songs[0]);
+    }
+
+
 };
 
-const stop_song = (message, severQueue) => {
+const stop_song = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
-    severQueue.songs = [];
-    severQueue.connection.dispatcher.end();
+    serverQueue.songs = [];
+    serverQueue.connection.dispatcher.end();
 
 }
