@@ -58,7 +58,12 @@ module.exports = {
             }
             }else{
                 serverQueue.songs.push(song);
-                return message.channel.send(`${song.title} has been added to the queue.`);
+                if(serverQueue.songs.length == 1){
+                    videoPlayer(message.guild, serverQueue.songs[0]);
+                }else{
+                    message.channel.send(`${song.title} has been added to the queue.`);
+                }
+                return;
             }
         } 
         else if(cmd === 'skip' || cmd === 'fs') skip_song(message, serverQueue);
@@ -77,13 +82,11 @@ const videoPlayer = async (guild, song) => {
         }
         return;
     }
-    if(song_queue.leaveTimer){
-        try{
-            clearTimeout(song_queue.leaveTimer);
-        }catch(error){
-            console.log(error)
-        }
-    }
+    try{
+        clearTimeout(song_queue.leaveTimer);
+    }catch(e){
+    
+    };
 
     const stream = ytdl(song.url, {filter: 'audioonly'});
     song_queue.connection.play(stream, {seek : 0 , volume: 0.5})
@@ -109,14 +112,17 @@ const skip_song = (message, serverQueue) => {
 
 const stop_song = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
-    queue.delete(message.guild.id);
+    if(!serverQueue.voice_channel || !serverQueue){
+        message.channel.send('I\'m not even in a channel, idiot.');
+    }
     serverQueue.voice_channel.leave();
+    queue.delete(message.guild.id);
 
 }
 
 const get_queue = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
-    if(!serverQueue){
+    if(!serverQueue || serverQueue.songs.length === 0){
         return message.channel.send('There are no songs in the queue');
     };
     let now_playing = serverQueue.songs[0].title;
