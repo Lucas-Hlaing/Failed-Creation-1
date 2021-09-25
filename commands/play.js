@@ -31,7 +31,7 @@ module.exports = {
                 const video = await videoFinder(args.join(' '));
 
                 if(video){
-                    song = {title : video.title, url : video.url};
+                    song = {title : video.title, url : video.url, thumbnail: video.thumbnail};
                 } else{
                     message.channel.send('error finding vid');
                 }
@@ -127,18 +127,18 @@ const get_queue = (message, serverQueue) => {
     if(!serverQueue || serverQueue.songs.length === 0){
         return message.channel.send('There are no songs in the queue');
     };
-    let now_playing = serverQueue.songs[0].title;
+    let now_playing = serverQueue.songs[0];
     let playlist = '';
 
     for(var i= 1; i < serverQueue.songs.length; i++){
         let song = serverQueue.songs[i];
-        playlist += `${i}. ${song.title} \n`
+        playlist += `${i}. ***[${song.title}](${song.url})*** \n`
     }
     const QueueEmbed = new MessageEmbed()
     .setColor('#CCE7F1')
     .setTitle(`Queue for ${message.guild.name}`)
     .addFields(
-        {name: 'Now Playing: ', value: now_playing},
+        {name: 'Now Playing: ', value: `***[${now_playing.title}](${now_playing.url})*** `},
         {name: 'Queue', value: playlist},
     );
 
@@ -151,11 +151,11 @@ const nowplay = (message,serverQueue) => {
     if(!serverQueue || serverQueue.songs.length === 0){
         return message.channel.send('There are no songs in the queue');
     };
-    let now_playing = serverQueue.songs[0].title;
+    let now_playing = serverQueue.songs[0];
     const NPEmbed = new MessageEmbed()
     .setColor('#CCE7F1')
     .setTitle('Now Playing')
-    .setDescription(now_playing);
+    .setDescription(`***[${now_playing.title}](${now_playing.url})*** `);
     
     message.channel.send(NPEmbed);
 };
