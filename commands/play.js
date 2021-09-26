@@ -6,7 +6,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing'],
+    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -22,7 +22,7 @@ module.exports = {
             let song = {};
             if(ytdl.validateURL(args[0])){
                 const songInfo = await ytdl.getInfo(args[0]);
-                song = {title : songInfo.videoDetails.title, url : songInfo.videoDetails.url};
+                song = {title : songInfo.videoDetails.title, url : songInfo.videoDetails.video_url};
             } else{
                 const videoFinder = async(query) => {
                     const videoResult = await ytSearch(query);
@@ -68,7 +68,7 @@ module.exports = {
             }
         } 
         else if(cmd === 'skip' || cmd === 'fs') skip_song(message, serverQueue);
-        else if(cmd === 'disconnect' || cmd === 'leave') stop_song(message, serverQueue);
+        else if(cmd === 'disconnect' || cmd === 'leave' || cmd === 'dc') stop_song(message, serverQueue);
         else if(cmd === 'queue' || cmd === 'q') get_queue(message, serverQueue);
         else if(cmd === 'np' || cmd === 'playing' || cmd === 'now') nowplay(message, serverQueue);
     }
