@@ -127,6 +127,10 @@ const get_queue = (message, serverQueue) => {
     if(!serverQueue || serverQueue.songs.length === 0){
         return message.channel.send('There are no songs in the queue');
     };
+    if(serverQueue.songs.length === 1){
+        nowplay(message,serverQueue);
+        return;
+    }
     let now_playing = serverQueue.songs[0];
     let playlist = '';
 
