@@ -3,11 +3,12 @@ const fs = require('fs');
 const Discord = require('discord.js');
 require('dotenv').config();
 
-var http = require('http');  
-http.createServer(function (req, res) {   
-  res.write("I'm alive");   
-  res.end(); 
-}).listen(8080);
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('ok');
+});
+server.listen(3000);
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
