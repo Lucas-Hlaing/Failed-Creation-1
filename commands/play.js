@@ -6,7 +6,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc'],
+    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc', 'loop'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -44,6 +44,7 @@ module.exports = {
                     connection : null,
                     songs : [],
                     leaveTimer : null,
+                    loop: false,
                 }
                 queue.set(message.guild.id, queue_constructor)
                 queue_constructor.songs.push(song);
@@ -71,6 +72,7 @@ module.exports = {
         else if(cmd === 'disconnect' || cmd === 'leave' || cmd === 'dc') stop_song(message, serverQueue);
         else if(cmd === 'queue' || cmd === 'q') get_queue(message, serverQueue);
         else if(cmd === 'np' || cmd === 'playing' || cmd === 'now') nowplay(message, serverQueue);
+        else if(cmd === 'loop') looping(message, serverQueue);
     }
 }
 
@@ -93,10 +95,13 @@ const videoPlayer = async (guild, song) => {
     const stream = ytdl(song.url, {filter: 'audioonly'});
     song_queue.connection.play(stream, {seek : 0 , volume: 0.5})
     .on('finish', () => {
+        if(song_queue.loop === true){
+            const finished = song_queue.songs[0];
+            song_queue.songs.push(finished);
+        }
         song_queue.songs.shift();
         videoPlayer(guild, song_queue.songs[0]);
     });
-    await song_queue.text_channel.send(`Now Playing: ${song.title}`);
 };
 
 const skip_song = (message, serverQueue) => {
@@ -117,9 +122,13 @@ const stop_song = (message, serverQueue) => {
     if(!serverQueue.voice_channel || !serverQueue){
         message.channel.send('I\'m not even in a channel, idiot.');
     }
-    message.member.voice.channel.leave();
+    try{message.member.voice.channel.leave();
     message.channel.send('Ok I\'m leaving :( ');
     queue.delete(message.guild.id);
+    }catch(error){
+        console.log(error);
+        message.channel.send('sth broke. Manually disconnect me.');
+    }
 
 }
 
@@ -145,7 +154,8 @@ const get_queue = (message, serverQueue) => {
     .addFields(
         {name: 'Now Playing: ', value: `***[${now_playing.title}](${now_playing.url})*** `},
         {name: 'Queue', value: playlist},
-    );
+    )
+    .setFooter(`Looping: ${serverQueue.loop}`);
 
 
     message.channel.send(QueueEmbed);
@@ -164,6 +174,26 @@ const nowplay = (message,serverQueue) => {
     
     message.channel.send(NPEmbed);
 };
+
+const looping = (message,serverQueue) => {
+    if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
+    if(!serverQueue || serverQueue.songs.length === 0){
+        return message.channel.send('There are no songs in the queue');
+    };
+    if(serverQueue.loop === true){
+        serverQueue.loop = null;
+        const LoopEmbed = new MessageEmbed()
+        .setColor('#6ACCBC')
+        .setTitle('Looping Stopped')
+        message.channel.send(LoopEmbed);
+    }else{
+        serverQueue.loop = true;
+        const LoopEmbed = new MessageEmbed()
+        .setColor('#6ACCBC')
+        .setTitle('Looping Queue')
+        message.channel.send(LoopEmbed);
+    }
+}
 
 function leaveTimeout (guild_id){
     song_queue = queue.get(guild_id);
