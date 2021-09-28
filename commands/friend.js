@@ -1,6 +1,6 @@
 module.exports = {
     name: 'friend',
-    aliases: ['may', 'sandy'],
+    aliases: ['may', 'sandy', 'henry'],
     description: 'just random facts',
     execute(message, args, cmd){
         if(cmd === 'may'){
@@ -21,6 +21,9 @@ module.exports = {
             }else{
                 message.channel.send('ohh that kiddo');
             }
+        }
+        if(cmd === 'henry'){
+            message.channel.send('<@355341741639073792> u suck');
         }
     }
 
