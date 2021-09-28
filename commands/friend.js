@@ -1,6 +1,6 @@
 module.exports = {
     name: 'friend',
-    aliases: ['may', 'sandy', 'henry'],
+    aliases: ['may', 'sandy', 'henry', 'harry'],
     description: 'just random facts',
     execute(message, args, cmd){
         if(cmd === 'may'){
