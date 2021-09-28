@@ -117,8 +117,8 @@ const stop_song = (message, serverQueue) => {
     if(!serverQueue.voice_channel || !serverQueue){
         message.channel.send('I\'m not even in a channel, idiot.');
     }
-    serverQueue.voice_channel.leave();
-    serverQueue.text_channel.send('Ok I\'m leaving :( ');
+    message.member.voice.channel.leave();
+    message.channel.send('Ok I\'m leaving :( ');
     queue.delete(message.guild.id);
 
 }
