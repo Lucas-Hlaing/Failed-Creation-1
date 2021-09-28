@@ -6,7 +6,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc', 'loop'],
+    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc', 'loop', 'shuffle'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -73,6 +73,7 @@ module.exports = {
         else if(cmd === 'queue' || cmd === 'q') get_queue(message, serverQueue);
         else if(cmd === 'np' || cmd === 'playing' || cmd === 'now') nowplay(message, serverQueue);
         else if(cmd === 'loop') looping(message, serverQueue);
+        else if(cmd === 'shuffle') shuffling(message, serverQueue);
     }
 }
 
@@ -193,6 +194,20 @@ const looping = (message,serverQueue) => {
         .setTitle('Looping Queue')
         message.channel.send(LoopEmbed);
     }
+}
+const shuffling = (message, serverQueue) => {
+    if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
+    if(!serverQueue || serverQueue.songs.length === 0){
+        return message.channel.send('There are no songs in the queue');
+    };
+    for(let i = serverQueue.songs.length-1; i>0; i--){
+        let j =  Math.ceil(Math.random() * (i));
+        [serverQueue.songs[i], serverQueue.songs[j]] = [serverQueue.songs[j], serverQueue.songs[i]];
+    }
+    const ShuffleEmbed = new MessageEmbed()
+        .setColor('#6ACCBC')
+        .setTitle('Shuffled Queue')
+        message.channel.send(ShuffleEmbed);
 }
 
 function leaveTimeout (guild_id){
