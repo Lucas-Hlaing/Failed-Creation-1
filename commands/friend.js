@@ -23,7 +23,14 @@ module.exports = {
             }
         }
         if(cmd === 'henry'){
+            if(message.author.id == '397684451154460673'){
             message.channel.send('<@355341741639073792> u suck');
+            }else{
+                message.channel.send('henry u suck');
+            }
+        }
+        if(cmd === 'harry'){
+            message.channel.send('harry gonna change the world!');
         }
     }
 
