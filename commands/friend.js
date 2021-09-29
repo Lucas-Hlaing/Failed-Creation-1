@@ -1,6 +1,6 @@
 module.exports = {
     name: 'friend',
-    aliases: ['may', 'sandy', 'henry', 'harry'],
+    aliases: ['may', 'sandy', 'henry', 'harry', 'jas', 'heine'],
     description: 'just random facts',
     execute(message, args, cmd){
         if(cmd === 'may'){
@@ -31,6 +31,15 @@ module.exports = {
         }
         if(cmd === 'harry'){
             message.channel.send('harry gonna change the world!');
+        }
+        if(cmd === 'jas'){
+            message.channel.send(`"smart" kid`);
+        }
+        if(cmd === 'heine'){
+            message.channel.send('go text ur gf instead. tsk tsk');
+        }
+        if(cmd === 'ray'){
+            message.channel.send('stop being sus');
         }
     }
 
