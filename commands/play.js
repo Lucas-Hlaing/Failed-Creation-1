@@ -83,7 +83,7 @@ const videoPlayer = async (guild, song) => {
         if(song_queue.songs.length == 0){
             song_queue.leaveTimer = setTimeout(function() {
                 leaveTimeout(guild.id);
-            }, 300 * 1000);
+            }, 1000 * 1000);
         }
         return;
     }
