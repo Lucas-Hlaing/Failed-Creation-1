@@ -6,7 +6,7 @@ const queue = new Map();
 
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc', 'loop', 'shuffle'],
+    aliases: ['skip', 'disconnect', 'p', 'leave', 'fs', 'q', 'queue', 'now', 'np', 'playing', 'dc', 'loop', 'shuffle', 'reset'],
     description: 'music stuff',
     async execute (message, args, cmd, client, Discord) {
 
@@ -74,6 +74,7 @@ module.exports = {
         else if(cmd === 'np' || cmd === 'playing' || cmd === 'now') nowplay(message, serverQueue);
         else if(cmd === 'loop') looping(message, serverQueue);
         else if(cmd === 'shuffle') shuffling(message, serverQueue);
+        else if(cmd === 'reset') resetting(message,serverQueue);
     }
 }
 
@@ -120,8 +121,12 @@ const skip_song = (message, serverQueue) => {
 
 const stop_song = (message, serverQueue) => {
     if(!message.member.voice.channel) return message.channel.send('Join a voice channel first.');
-    if(!serverQueue.voice_channel || !serverQueue){
+    if(!serverQueue){
+        message.channel.send('I\'m not even in a channel.');
+        return;
+    }else if(!serverQueue.voice_channel){
         message.channel.send('I\'m not even in a channel, idiot.');
+        return;
     }
     try{message.member.voice.channel.leave();
     message.channel.send('Ok I\'m leaving :( ');
@@ -208,6 +213,13 @@ const shuffling = (message, serverQueue) => {
         .setColor('#6ACCBC')
         .setTitle('Shuffled Queue')
         message.channel.send(ShuffleEmbed);
+}
+const resetting = (message,serverQueue) =>{
+    if(!serverQueue){
+        message.channel.send('nth to do');
+    }else{
+        queue.delete(message.guild.id);
+    }
 }
 
 function leaveTimeout (guild_id){
