@@ -10,7 +10,9 @@ const server = http.createServer((req, res) => {
 });
 server.listen(3000);
 
-const client = new Discord.Client();
+const { Client, Intents } = require('discord.js');
+
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 client.commands = new Discord.Collection();
 
 ['command_handler', 'event_handler'].forEach(handler =>{
