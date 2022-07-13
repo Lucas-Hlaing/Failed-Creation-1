@@ -2,7 +2,12 @@ module.exports = {
     name: 'friend',
     aliases: ['may', 'sandy', 'henry', 'harry', 'jas', 'heine', 'ray', 'justin'],
     description: 'just random facts',
-    execute(message, args, cmd){
+    async execute(message, args, cmd){
+
+        await message.channel.messages.fetch({limit: 1}).then(messages => {
+            message.channel.bulkDelete(messages);
+        });
+
         if(cmd === 'may'){
             if(message.author.id == '763074950616842240'){
                 message.reply('ure gonna say my bot sucks so no u cant use this command. :((');
