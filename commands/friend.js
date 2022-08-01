@@ -1,6 +1,6 @@
 module.exports = {
     name: 'friend',
-    aliases: ['may', 'sandy', 'henry', 'harry', 'jas', 'heine', 'ray', 'justin', 'lucas','khine','simon','hy'],
+    aliases: ['may', 'sandy', 'henry', 'harry', 'jas', 'heine', 'ray', 'justin', 'lucas','khine','simon','hy','alisa','eric'],
     description: 'just random facts',
     async execute(message, args, cmd){
 
